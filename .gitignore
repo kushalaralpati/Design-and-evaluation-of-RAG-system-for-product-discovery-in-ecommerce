@@ -1,0 +1,24 @@
+# Data files (too large for GitHub)
+data/*.jsonl.gz
+data/*.jsonl
+data/*.csv
+data/*.pkl
+data/*.json
+
+# Model cache
+models/
+.cache/
+__pycache__/
+*.pyc
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Environment
+.env
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
