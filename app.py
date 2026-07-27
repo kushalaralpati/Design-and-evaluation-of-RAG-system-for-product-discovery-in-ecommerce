@@ -304,18 +304,11 @@ def main():
 
     # Empty state
     if not query:
-        st.markdown("""
-        <div style="background:#f8fafc;border-radius:12px;padding:1.5rem 2rem;margin-top:1rem;">
-            <p style="font-weight:600;margin-bottom:0.8rem;">What this demo shows</p>
-            <p>🔵 <b>BM25</b> — fast lexical retrieval (keyword matching)</p>
-            <p>🟣 <b>Hybrid</b> — BM25 + FAISS dense embeddings fused with λ=0.5</p>
-            <p>🏷️ <b>Brand-aware retrieval</b> — enriched with brand names and product titles</p>
-            <p>🤖 <b>RAG Answer</b> — Claude mentions specific brands from the evidence</p>
-            <p>📊 <b>Brand visibility</b> — see which brands rank for any query (GEO insight)</p>
-            <p style="color:#94a3b8;font-size:0.8rem;margin-top:1rem;">
-            Project results · 43,181 reviews · Hybrid nDCG@10=0.7576 · Precision@10=0.8650 · MRR@10=0.9750
-            </p>
-        </div>""", unsafe_allow_html=True)
+        st.markdown(
+            "<p style='color:#94a3b8;text-align:center;margin-top:2rem;'>"
+            "👆 Type a product query or pick an example to see the RAG pipeline in action.</p>",
+            unsafe_allow_html=True
+        )
         return
 
     # Run retrieval
