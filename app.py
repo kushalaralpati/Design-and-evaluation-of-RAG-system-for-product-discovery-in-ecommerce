@@ -236,24 +236,29 @@ Answer:"""
 
 # ── UI helpers ────────────────────────────────────────────────────────────────
 def review_card(row, color):
-    import html
     brand  = row.get("brand", "")
     ptitle = row.get("product_title", "")
-    stars  = "⭐" * int(float(row.get("rating") or 0))
-    preview = html.escape(row["original_text"][:260])
-    if len(row["original_text"]) > 260:
+    rating = row.get("rating") or 0
+    stars  = "⭐" * int(float(rating))
+    preview = str(row["original_text"])[:260]
+    if len(str(row["original_text"])) > 260:
         preview += "…"
+    title_line = str(ptitle)[:60] if ptitle else str(row["title"])[:60]
 
-    brand_tag  = f'<span class="brand-tag">{html.escape(brand)}</span>' if brand and brand not in ["", "Unknown Brand"] else ""
-    title_line = html.escape(ptitle[:60]) if ptitle else html.escape(row["title"][:60])
-
-    st.markdown(f"""
-    <div class="review-card" style="border-left-color:{color};">
-        {brand_tag}
-        <div class="card-title">#{int(row['rank'])} &nbsp; {title_line}</div>
-        <div class="card-text">{preview}</div>
-        <div class="card-meta">{stars} &nbsp;·&nbsp; score {row['score']:.4f} &nbsp;·&nbsp; {row['doc_id']}</div>
-    </div>""", unsafe_allow_html=True)
+    st.markdown(
+        f'<div style="border-left:4px solid {color};padding:0.2rem 0 0.2rem 0.8rem;margin:0.5rem 0;">',
+        unsafe_allow_html=True
+    )
+    if brand and brand not in ["", "Unknown Brand"]:
+        st.markdown(
+            f'<span style="background:#ede9fe;color:#5b21b6;font-size:0.7rem;'
+            f'font-weight:600;padding:2px 8px;border-radius:99px;">{brand}</span>',
+            unsafe_allow_html=True
+        )
+    st.markdown(f"**#{int(row['rank'])}  {title_line}**")
+    st.write(preview)
+    st.caption(f"{stars} · score {row['score']:.4f} · {row['doc_id']}")
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def brand_visibility_section(hybrid_res):
