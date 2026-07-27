@@ -1,3 +1,4 @@
+import re
 import time
 import numpy as np
 import pandas as pd
@@ -240,7 +241,7 @@ def review_card(row, color):
     ptitle = row.get("product_title", "")
     rating = row.get("rating") or 0
     stars  = "⭐" * int(float(rating))
-    preview = str(row["original_text"])[:260]
+    preview = re.sub(r"<br\s*/?>", " ", str(row["original_text"]))[:260]
     if len(str(row["original_text"])) > 260:
         preview += "…"
     title_line = str(ptitle)[:60] if ptitle else str(row["title"])[:60]
