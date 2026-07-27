@@ -195,21 +195,32 @@ def generate_rag_answer(query, docs):
         stars  = row.get("rating", "?")
         context += f"\n[{row['doc_id']}] {name} | ⭐{stars}\n{row['original_text'][:500]}\n"
 
+    # Build ranked brand list for the prompt
+    brand_ranking = []
+    for _, row in docs.iterrows():
+        brand  = row.get("brand", "")
+        ptitle = row.get("product_title", "")
+        if brand and brand not in ["", "Unknown Brand"]:
+            brand_ranking.append(f"Rank #{int(row['rank'])}: {brand} — {ptitle[:50]}")
+    brand_context = "\n".join(brand_ranking) if brand_ranking else "No brand data available"
+
     prompt = f"""You are a knowledgeable e-commerce product advisor.
 
 A customer asked: "{query}"
 
-Below are the most relevant customer reviews from real products. Each review is labelled with its brand and product name.
+Top-ranked brands and products retrieved for this query:
+{brand_context}
 
+Supporting customer reviews:
 {context}
 
-Your task:
-- Answer the customer's query directly and helpfully
-- Mention specific brand names and product names from the reviews above
-- Cite evidence using review IDs like [DOC_ID]
-- If multiple brands appear, compare them briefly
-- Be honest — if a product has mixed reviews, say so
-- Keep your answer to 4-5 sentences maximum
+Instructions:
+- Open by naming the highest-ranked brand and why it fits the query
+- Naturally mention brand names throughout — e.g. "Neutrogena ranks #1 here because..."
+- Compare brands if multiple appear
+- Cite review IDs like [DOC_ID] as evidence
+- End with a clear brand recommendation
+- 4-5 sentences maximum
 
 Answer:"""
 
@@ -355,9 +366,7 @@ def main():
             st.markdown(f'<div class="rag-box">{answer}</div>', unsafe_allow_html=True)
             st.caption(f"⏱️ Generation: {gen_lat:.2f}s")
 
-            # Brand visibility — embedded GEO insight
-            st.markdown("---")
-            brand_visibility_section(hybrid_res)
+
 
             # Evidence expanders
             st.markdown('<div class="section-label">Evidence used</div>',
@@ -374,7 +383,7 @@ def main():
             st.warning("Add `ANTHROPIC_API_KEY` in Streamlit Cloud → Settings → Secrets.")
             st.markdown('<div class="section-label">Evidence (retrieval only)</div>',
                         unsafe_allow_html=True)
-            brand_visibility_section(hybrid_res)
+
             for _, row in hybrid_res.iterrows():
                 with st.expander(f"#{int(row['rank'])} {row['title'][:65]}"):
                     st.write(row["original_text"][:400])
