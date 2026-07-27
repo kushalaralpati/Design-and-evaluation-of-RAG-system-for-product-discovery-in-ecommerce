@@ -292,9 +292,9 @@ def main():
     # Hero
     st.markdown("""
     <div class="hero">
-        <h1>🛍️ ShopSense — AI Product Discovery</h1>
-        <p>Hybrid RAG Pipeline · BM25 × FAISS + Claude · Brand-Aware Generation</p>
-        <div class="sub">Built by Kushala Ralpati Srinivas</div>
+        <h1>🛍️ ShopSense</h1>
+        <p>Ask What You Want, Get What You Need</p>
+        <div class="sub">Hybrid RAG · BM25 × FAISS + Claude · Built by Kushala Ralpati Srinivas</div>
     </div>""", unsafe_allow_html=True)
 
     # Load data
