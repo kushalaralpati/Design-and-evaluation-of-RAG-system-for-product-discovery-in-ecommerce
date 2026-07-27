@@ -236,15 +236,16 @@ Answer:"""
 
 # ── UI helpers ────────────────────────────────────────────────────────────────
 def review_card(row, color):
+    import html
     brand  = row.get("brand", "")
     ptitle = row.get("product_title", "")
     stars  = "⭐" * int(float(row.get("rating") or 0))
-    preview = row["original_text"][:260]
+    preview = html.escape(row["original_text"][:260])
     if len(row["original_text"]) > 260:
         preview += "…"
 
-    brand_tag = f'<span class="brand-tag">{brand}</span>' if brand and brand not in ["", "Unknown Brand"] else ""
-    title_line = ptitle[:60] if ptitle else row["title"][:60]
+    brand_tag  = f'<span class="brand-tag">{html.escape(brand)}</span>' if brand and brand not in ["", "Unknown Brand"] else ""
+    title_line = html.escape(ptitle[:60]) if ptitle else html.escape(row["title"][:60])
 
     st.markdown(f"""
     <div class="review-card" style="border-left-color:{color};">
